@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  web:
+    build: services/app
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/app/:/usr/src/app/
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=my_user
+      - POSTGRES_PASSWORD=my_user
+      - POSTGRES_DB=my_db
+    ports:
+      - 5442:5432
+
+volumes:
+  postgres_data:
